@@ -3,96 +3,368 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Торговая платформа - Прототип</title>
-    <link rel="stylesheet" href="style.css">
+    <title>PocketTrade PRO - Прототип</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .chart-container {
-            position: relative;
-            height: 100%;
-            width: 100%;
+        /* Современная темная тема в стиле торговых платформ */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
+
+        body {
+            background-color: #0b0e14;
+            color: #e6edf3;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: #131722;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #222634;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2962ff;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .balance-box {
+            background: linear-gradient(135deg, #0b6623, #1b8a3e);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            box-shadow: 0 0 10px rgba(27, 138, 62, 0.2);
+        }
+
+        .btn-logout {
+            color: #787b86;
+            text-decoration: none;
+            transition: color 0.2s;
+            font-size: 14px;
+        }
+        .btn-logout:hover {
+            color: #f23645;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 65px);
+        }
+
+        .chart-section {
+            flex: 3;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            background-color: #0b0e14;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background-color: #131722;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px solid #222634;
+        }
+
+        .asset-selector {
+            background-color: #1e222d;
+            color: #e6edf3;
+            border: 1px solid #363c4e;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .asset-selector:focus {
+            border-color: #2962ff;
+        }
+
+        .chart-container {
+            flex: 1;
+            position: relative;
+            background-color: #131722;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #222634;
+        }
+
+        .trading-panel {
+            flex: 1;
+            max-width: 320px;
+            background-color: #131722;
+            border-left: 1px solid #222634;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #dbdee9;
+            border-bottom: 1px solid #222634;
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            color: #787b86;
+            font-size: 13px;
+        }
+
+        .input-group input {
+            background-color: #1e222d;
+            border: 1px solid #363c4e;
+            color: #e6edf3;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            outline: none;
+        }
+        .input-group input:focus {
+            border-color: #2962ff;
+        }
+
+        .btn-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        .btn {
+            padding: 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            color: white;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-buy {
+            background-color: #089981;
+            box-shadow: 0 4px 12px rgba(8, 153, 129, 0.2);
+        }
+        .btn-sell {
+            background-color: #f23645;
+            box-shadow: 0 4px 12px rgba(242, 54, 69, 0.2);
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .price-display {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: monospace;
+            transition: color 0.1s ease;
+        }
+        .price-up { color: #089981; }
+        .price-down { color: #f23645; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">CryptoTrade</div>
+    <div class="logo">PocketTrade PRO</div>
     <div class="nav-links">
-        <a href="#">Баланс: $1000</a>
-        <a href="#">Выход</a>
+        <div class="balance-box">Баланс: $1000</div>
+        <a href="#" class="btn-logout">Выход</a>
     </div>
 </header>
 
 <div class="main-container">
     <div class="chart-section">
-        <h2>Живой график котировок</h2>
+        <div class="chart-header">
+            <select id="assetSelect" class="asset-selector">
+                <option value="EUR_USD">EUR / USD (Валютный рынок)</option>
+                <option value="GBP_USD">GBP / USD (Валютный рынок)</option>
+                <option value="USD_JPY">USD / JPY (Валютный рынок)</option>
+                <option value="AUD_CAD">AUD / CAD (Валютный рынок)</option>
+                <option value="BTC_USDT">BTC / USDT (Криптовалюта)</option>
+                <option value="ETH_USDT">ETH / USDT (Криптовалюта)</option>
+                <option value="SOL_USDT">SOL / USDT (Криптовалюта)</option>
+            </select>
+            <div id="livePrice" class="price-display price-up">0.0000</div>
+        </div>
         <div class="chart-container">
             <canvas id="tradingChart"></canvas>
         </div>
     </div>
     <div class="trading-panel">
-        <h2>Панель управления</h2>
+        <div class="panel-title">Панель управления</div>
+        
         <div class="input-group">
-            <label>Сумма:</label>
-            <input type="number" value="10">
+            <label>Сумма сделки ($):</label>
+            <input type="number" value="10" min="1">
         </div>
-        <button class="btn btn-buy">Купить (CALL)</button>
-        <button class="btn btn-sell">Продать (PUT)</button>
+
+        <div class="input-group">
+            <label>Время экспирации:</label>
+            <input type="text" value="1 мин" readonly style="background-color: #1e222d; color: #787b86; cursor: not-allowed;">
+        </div>
+
+        <div class="btn-actions">
+            <button class="btn btn-buy">ВВЕРХ (CALL) ▲</button>
+            <button class="btn btn-sell">ВНИЗ (PUT) ▼</button>
+        </div>
     </div>
 </div>
 
 <script>
+    // База данных для имитации разных рынков
+    const assetsConfig = {
+        EUR_USD: { basePrice: 1.0852, digits: 4, volatility: 0.00015 },
+        GBP_USD: { basePrice: 1.2741, digits: 4, volatility: 0.0002 },
+        USD_JPY: { basePrice: 156.65, digits: 2, volatility: 0.03 },
+        AUD_CAD: { basePrice: 0.9124, digits: 4, volatility: 0.00015 },
+        BTC_USDT: { basePrice: 67420, digits: 1, volatility: 12 },
+        ETH_USDT: { basePrice: 3480, digits: 1, volatility: 1.5 },
+        SOL_USDT: { basePrice: 144.3, digits: 2, volatility: 0.12 }
+    };
+
+    let currentAsset = 'EUR_USD';
+    let lastPrice = assetsConfig[currentAsset].basePrice;
+
     const ctx = document.getElementById('tradingChart').getContext('2d');
+    
+    // Создаем стильный неоновый градиент для подложки графика
+    const chartGradient = ctx.createLinearGradient(0, 0, 0, 400);
+    chartGradient.addColorStop(0, 'rgba(41, 98, 255, 0.25)');
+    chartGradient.addColorStop(1, 'rgba(41, 98, 255, 0.0)');
+
     const tradingChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['12:00', '12:05', '12:10', '12:15', '12:20'],
+            labels: [],
             datasets: [{
                 label: 'Цена актива',
-                data: [120, 122, 121, 125, 124],
-                borderColor: '#00b0ff',
-                backgroundColor: 'rgba(0, 176, 255, 0.1)',
-                borderWidth: 2,
+                data: [],
+                borderColor: '#2962ff',
+                backgroundColor: chartGradient,
+                borderWidth: 2.5,
                 fill: true,
-                tension: 0.4
+                tension: 0.3,
+                pointRadius: 0, // Убираем точки для чистоты графика
+                pointHoverRadius: 4
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
             scales: {
                 y: {
-                    beginAtZero: false,
-                    grid: {
-                        color: 'rgba(255, 255, 255, 0.1)'
-                    }
+                    grid: { color: 'rgba(255, 255, 255, 0.03)' },
+                    ticks: { color: '#787b86', font: { family: 'monospace' } }
                 },
                 x: {
-                    grid: {
-                        color: 'rgba(255, 255, 255, 0.1)'
-                    }
+                    grid: { color: 'rgba(255, 255, 255, 0.03)' },
+                    ticks: { color: '#787b86', maxTicksLimit: 10 }
                 }
             }
         }
     });
 
+    // Функция для генерации стартовой истории графика при переключении
+    function generateHistory() {
+        tradingChart.data.labels = [];
+        tradingChart.data.datasets[0].data = [];
+        const config = assetsConfig[currentAsset];
+        let tempPrice = config.basePrice;
+        const now = new Date();
+
+        for (let i = 29; i >= 0; i--) {
+            const time = new Date(now.getTime() - i * 1000);
+            const timeStr = time.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            tempPrice += (Math.random() - 0.5) * config.volatility;
+            
+            tradingChart.data.labels.push(timeStr);
+            tradingChart.data.datasets[0].data.push(tempPrice.toFixed(config.digits));
+        }
+        lastPrice = tempPrice;
+        tradingChart.update();
+        updatePriceUI(lastPrice, lastPrice);
+    }
+
+    function updatePriceUI(newPrice, oldPrice) {
+        const config = assetsConfig[currentAsset];
+        const priceEl = document.getElementById('livePrice');
+        priceEl.textContent = newPrice.toFixed(config.digits);
+
+        if (newPrice > oldPrice) {
+            priceEl.className = 'price-display price-up';
+        } else if (newPrice < oldPrice) {
+            priceEl.className = 'price-display price-down';
+        }
+    }
+
+    // Слушатель смены торговой пары
+    document.getElementById('assetSelect').addEventListener('change', (e) => {
+        currentAsset = e.target.value;
+        generateHistory();
+    });
+
+    // Ежесекундное обновление данных
     setInterval(() => {
         const now = new Date();
-        const timeString = now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0');
-        const lastData = tradingChart.data.datasets[0].data[tradingChart.data.datasets[0].data.length - 1];
-        const newData = lastData + (Math.random() - 0.5) * 2;
+        const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const config = assetsConfig[currentAsset];
+        
+        const nextPrice = lastPrice + (Math.random() - 0.5) * config.volatility;
 
-        tradingChart.data.labels.push(timeString);
-        tradingChart.data.datasets[0].data.push(newData.toFixed(2));
+        tradingChart.data.labels.push(timeStr);
+        tradingChart.data.datasets[0].data.push(nextPrice.toFixed(config.digits));
 
-        if (tradingChart.data.labels.length > 20) {
+        if (tradingChart.data.labels.length > 30) {
             tradingChart.data.labels.shift();
             tradingChart.data.datasets[0].data.shift();
         }
 
-        tradingChart.update();
+        updatePriceUI(nextPrice, lastPrice);
+        lastPrice = nextPrice;
+        tradingChart.update('none'); // Оптимизированное обновление без просадки FPS
     }, 1000);
+
+    // Старт
+    generateHistory();
 </script>
 
 </body>
